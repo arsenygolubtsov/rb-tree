@@ -128,8 +128,8 @@ public:
     {
         if (root_ == nullptr)
         {
-            root_->parent = nullptr;
             root_ = new node_t;
+            root_->parent = nullptr;
             root_->value = value;
             root_->left = nullptr;
             root_->right = nullptr;
@@ -151,6 +151,7 @@ public:
                         run_->color = true;
                         run_->left = nullptr;
                         run_->right = nullptr;
+                        insert_case1(run_);
                         return;
                     }
                     else
@@ -169,6 +170,7 @@ public:
                         run_->color = true;
                         run_->left = nullptr;
                         run_->right = nullptr;
+                        insert_case1(run_);
                         return;
                     }
                     else
@@ -178,7 +180,6 @@ public:
                 }
             }
         }
-        insert_case1(run_);
     }
     
     node_t * grandparent(node_t * N){
@@ -206,9 +207,9 @@ public:
         }
         N->right = node->left;
         if(node->left != nullptr){
-            node->left->parent = n;
+            node->left->parent = N;
         }
-        n->parent = node;
+        N->parent = node;
         node->left = N;
     }
     
@@ -223,9 +224,9 @@ public:
         }
         N->left = node->right;
         if(node->right != nullptr){
-            node->right->parent = n;
+            node->right->parent = N;
         }
-        n->parent = node;
+        N->parent = node;
         node->right = N;
     }
     
@@ -242,7 +243,7 @@ public:
     void insert_case3(node_t * N){
         node_t * u = uncle(N), * g;
         if(u != nullptr && u->color == true){
-            n->parent->color = false;
+            N->parent->color = false;
             u->color = false;
             g = grandparent(N);
             g->color = true;
