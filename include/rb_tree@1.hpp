@@ -24,18 +24,104 @@ public:
         root_ = nullptr;
     }
     
-    node_t * grandparent(node_t * N){
-        if(N != nullptr && N->parent != nullptr){
-            return N->parent->parent;
+    ~tree_t()
+    {
+        if (root_ != nullptr)
+        {
+            del(root_);
         }
-        else return nullptr;
+    }
+
+    void del(node_t* run_)
+    {
+        if (run_ != nullptr)
+        {
+            if (run_->left != nullptr)
+            {
+                del(run_->left);
+            }
+            if (run_->right != nullptr)
+            {
+                del(run_->right);
+            }
+            delete run_;
+        }
+    }
+
+    void print(std::ostream& stream, node_t* run_, size_t u) const
+    {
+        if (run_->right != nullptr)
+        {
+            u++;
+            print(stream, run_->right, u);
+            u--;
+        }
+        for (size_t k = 0; k < u; k++)
+        {
+            stream << "--";
+        }
+        stream << run_->value << std::endl;
+        if (run_->left != nullptr)
+        {
+            u++;
+            print(stream, run_->left, u);
+            u--;
+        }
     }
     
-    node_t * uncle(node_t * N){
-        node_t * g = grandparent(N);
-        if(g == nullptr) return nullptr;
-        if(N->parent == g->left) return g->right;
-        else return g->left;
+    bool equal(node_t* a, node_t* b) const{
+        if (a==nullptr && b==nullptr) return(true);
+        else if (a!=nullptr && b!=nullptr)
+        {
+            return(
+                    a->value == b->value &&
+                    equal(a->left, b->left) &&
+                    equal(a->right, b->right)
+            );
+        }
+        else return(false);
+    }
+    
+    auto operator==(tree_t const & other) const{
+        node_t* a=root_; node_t* b=other.root_;
+        return (equal(a, b));
+    }
+    
+    bool find(T value) const
+    {
+        if (root_ == nullptr)
+        {
+            return false;
+        }
+        else
+        {
+            node_t* run_ = root_;
+            while (run_ != nullptr)
+            {
+                if (run_->value == value)
+                {
+                    return true;
+                }
+                else if (run_->value < value)
+                {
+                    run_ = run_->right;
+                }
+                else if (run_->value > value)
+                {
+                    run_ = run_->left;
+                }
+            }
+            return false;
+        }
+    }
+    
+    tree_t(std::initializer_list<T> keys){
+        root_=nullptr;
+        int n = keys.size();
+        const int* param = keys.begin();
+        for (int i=0; i < n; i++){
+            insert(param[i]);
+        }
     }
     
     void insert(T value)
@@ -92,6 +178,21 @@ public:
                 }
             }
         }
+        insert_case1(run_);
+    }
+    
+    node_t * grandparent(node_t * N){
+        if(N != nullptr && N->parent != nullptr){
+            return N->parent->parent;
+        }
+        else return nullptr;
+    }
+    
+    node_t * uncle(node_t * N){
+        node_t * g = grandparent(N);
+        if(g == nullptr) return nullptr;
+        if(N->parent == g->left) return g->right;
+        else return g->left;
     }
     
     void rotate_left(node_t * N){
@@ -145,7 +246,7 @@ public:
             u->color = false;
             g = grandparent(N);
             g->color = true;
-            insert_case1(g);
+            insert_case1(N);
         }
         else insert_case4(N);
     }
@@ -169,101 +270,5 @@ public:
         g->color = true;
         if(N == N->parent->left && g->left == N->parent) rotate_right(g);
         else rotate_left(g);
-    }
-    
-    bool equal(node_t* a, node_t* b) const{
-        if (a==nullptr && b==nullptr) return(true);
-        else if (a!=nullptr && b!=nullptr)
-        {
-            return(
-                    a->value == b->value &&
-                    equal(a->left, b->left) &&
-                    equal(a->right, b->right)
-            );
-        }
-        else return(false);
-    }
-    
-    auto operator==(tree_t const & other) const{
-        node_t* a=root_; node_t* b=other.root_;
-        return (equal(a, b));
-    }
-    
-    bool find(T value) const
-    {
-        if (root_ == nullptr)
-        {
-            return false;
-        }
-        else
-        {
-            node_t* run_ = root_;
-            while (run_ != nullptr)
-            {
-                if (run_->value == value)
-                {
-                    return true;
-                }
-                else if (run_->value < value)
-                {
-                    run_ = run_->right;
-                }
-                else if (run_->value > value)
-                {
-                    run_ = run_->left;
-                }
-            }
-            return false;
-        }
-    }
-
-    node_t* root() const
-    {
-        return root_;
-    }
-
-    ~tree_t()
-    {
-        if (root_ != nullptr)
-        {
-            del(root_);
-        }
-    }
-
-    void del(node_t* run_)
-    {
-        if (run_ != nullptr)
-        {
-            if (run_->left != nullptr)
-            {
-                del(run_->left);
-            }
-            if (run_->right != nullptr)
-            {
-                del(run_->right);
-            }
-            delete run_;
-        }
-    }
-
-    void print(std::ostream& stream, node_t* run_, size_t u) const
-    {
-        if (run_->right != nullptr)
-        {
-            u++;
-            print(stream, run_->right, u);
-            u--;
-        }
-        for (size_t k = 0; k < u; k++)
-        {
-            stream << "--";
-        }
-        stream << run_->value << std::endl;
-        if (run_->left != nullptr)
-        {
-            u++;
-            print(stream, run_->left, u);
-            u--;
-        }
     }
 };
