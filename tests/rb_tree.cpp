@@ -145,7 +145,7 @@ TEST_CASE("equal")
 
 TEST_CASE("new")
 {
-	tree_t<int> tree {10 , 85 , 15 , 70 , 20 , 60 , 30 , 50 , 65 , 80 , 90 , 40 , 5 , 55};
+	tree_t<int> tree {10 , 85 , 15};
 	
 	std::string result{	"----85\n"
                         	"--15\n"
