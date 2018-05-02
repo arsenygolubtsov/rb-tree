@@ -143,7 +143,7 @@ TEST_CASE("equal")
 	REQUIRE(tree1==tree2);
 }
 
-TEST_CASE("new")
+TEST_CASE("new0")
 {
 	tree_t<int> tree {10 , 85 , 15};
 	
