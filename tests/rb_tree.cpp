@@ -147,6 +147,19 @@ TEST_CASE("new")
 {
 	tree_t<int> tree {10 , 85 , 15 , 70 , 20 , 60 , 30 , 50 , 65 , 80 , 90 , 40 , 5 , 55};
 	
+	std::string result{	"----85\n"
+                        	"--15\n"
+                        	"----10\n"};
+	
+	std::ostringstream ostream;
+    	tree.print(ostream, tree.root(), 1);
+    	REQUIRE(ostream.str() == result);
+}
+
+TEST_CASE("new")
+{
+	tree_t<int> tree {10 , 85 , 15 , 70 , 20 , 60 , 30 , 50 , 65 , 80 , 90 , 40 , 5 , 55};
+	
 	std::string result{	"--------90\n"
                         	"------85\n"
                         	"--------80\n"
