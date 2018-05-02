@@ -8,9 +8,11 @@ class tree_t
 private:
     struct node_t
     {
+        node_t* parent;
         node_t* left;
         node_t* right;
         T value;
+        bool color;
     };
 
 private:
@@ -22,19 +24,106 @@ public:
         root_ = nullptr;
     }
     
-    tree_t(std::initializer_list<T> keys){
-        root_=nullptr;
-        int n = keys.size();
-        const int* param = keys.begin();
-        for (int i=0; i < n; i++){
-            insert(param[i]);
+    node_t * grandparent(node_t * N){
+        if(N != nullptr && N->parent != nullptr){
+            return N->parent->parent;
+        }
+        else return nullptr;
+    }
+    
+    node_t * uncle(node_t * N){
+        node_t * g = grandparent(N);
+        if(g == nullptr) return nullptr;
+        if(N->parent == g->left) return g->right;
+        else return g->left;
+    }
+    
+    void insert(T value)
+    {
+        if (root_ == nullptr)
+        {
+            root_->parent = nullptr;
+            root_ = new node_t;
+            root_->value = value;
+            root_->left = nullptr;
+            root_->right = nullptr;
+        }
+        else
+        {
+            node_t* run_ = root_;
+            while (run_ != nullptr)
+            {
+                if (value < run_->value)
+                {
+                    if (run_->left == nullptr)
+                    {
+                        run_->left = new node_t;
+                        run_->left->parent = run_;
+                        run_ = run_->left;
+                        run_->value = value;
+                        run_->left = nullptr;
+                        run_->right = nullptr;
+                        return;
+                    }
+                    else
+                    {
+                        run_ = run_->left;
+                    }
+                }
+                else if (value >= run_->value)
+                {
+                    if (run_->right == nullptr)
+                    {
+                        run_->right = new node_t;
+                        run_->right->parent = run_;
+                        run_ = run_->right;
+                        run_->value = value;
+                        run_->left = nullptr;
+                        run_->right = nullptr;
+                        return;
+                    }
+                    else
+                    {
+                        run_ = run_->right;
+                    }
+                }
+            }
         }
     }
     
-    bool isEmpty()
-	{
-		return (!root_);
-	}
+    void rotate_left(node_t * N){
+        node_t * node = N->right;
+        node->parent = N->parent;
+        if(N->parent != nullptr){
+            if(N->parent->left = N){
+                N->parent->left = node;
+            }
+            else N->parent->right = node;
+        }
+        N->right = node->left;
+        if(node->left != nullptr){
+            node->left->parent = n;
+        }
+        n->parent = node;
+        node->left = N;
+    }
+    
+    void rotate_right(node_t * N){
+        node_t * node = N->left;
+        node->parent = N->parent;
+        if(N->parent != nullptr){
+            if(N->parent->left == N){
+                N->parent->left = node;
+            }
+            else N->parent->right = node;
+        }
+        N->left = node->right;
+        if(node->right != nullptr){
+            node->right->parent = n;
+        }
+        n->parent = node;
+        node->right = N;
+    }
     
     bool equal(node_t* a, node_t* b) const{
         if (a==nullptr && b==nullptr) return(true);
@@ -53,168 +142,7 @@ public:
         node_t* a=root_; node_t* b=other.root_;
         return (equal(a, b));
     }
-
-    void insert(T value)
-    {
-        if (root_ == nullptr)
-        {
-            root_ = new node_t;
-            root_->value = value;
-            root_->left = nullptr;
-            root_->right = nullptr;
-        }
-        else
-        {
-            node_t* run_ = root_;
-            while (run_ != nullptr)
-            {
-                if (value < run_->value)
-                {
-                    if (run_->left == nullptr)
-                    {
-                        run_->left = new node_t;
-                        run_ = run_->left;
-                        run_->value = value;
-                        run_->left = nullptr;
-                        run_->right = nullptr;
-                        return;
-                    }
-                    else
-                    {
-                        run_ = run_->left;
-                    }
-                }
-                else if (value >= run_->value)
-                {
-                    if (run_->right == nullptr)
-                    {
-                        run_->right = new node_t;
-                        run_ = run_->right;
-                        run_->value = value;
-                        run_->left = nullptr;
-                        run_->right = nullptr;
-                        return;
-                    }
-                    else
-                    {
-                        run_ = run_->right;
-                    }
-                }
-            }
-        }
-    }
     
-   bool remove(T value){
-    if(root_ == nullptr){
-        return false;
-    }
-    else{
-        node_t* param1 = nullptr;
-        node_t* param2 = root_;
-        while(1){
-            if(param2->value == value){
-                break;
-            }
-            else if(value > param2->value){
-                param1 = param2;
-                param2 = param2->right;
-            }
-            else if(value < param2->value){
-                param1 = param2;
-                param2 = param2->left;
-            }
-            if(param2 == nullptr){
-                return false;
-            }
-        }
-        if(param2->left == nullptr && param2->right == nullptr){
-            if(param2 == root_){
-                node_t* node = root_;
-                root_ = nullptr;
-                delete node;
-            }
-            else{
-                if(param1->left == param2){
-                    param1->left = nullptr;
-                    delete param2;
-                }
-                if(param1->right == param2){
-                    param1->right = nullptr;
-                    delete param2;
-                }
-            }
-        }
-        else if((param2->left != nullptr && param2->right == nullptr) || (param2->left == nullptr && param2->right != nullptr)){
-            if(param2 == root_){
-                node_t* node = root_;
-                if(param2->left != nullptr){
-                    root_ = param2->left;
-                }
-                else if(param2->right != nullptr){
-                    root_ = param2->left;
-                }
-                delete node;
-            }
-            else{
-                if(param1->left == param2){
-                    if(param2->left != nullptr){
-                        param1->left = param2->left;
-                        delete param2;
-                    }
-                    else if(param2->right != nullptr){
-                        param1->left = param2->right;
-                        delete param2;
-                    }
-                }
-                else if(param1->right == param2){
-                    if(param2->left != nullptr){
-                        param1->right = param2->left;
-                        delete param2;
-                    }
-                    else if(param2->right != nullptr){
-                        param1->right = param2->right;
-                        delete param2;
-                    }
-                }
-            }
-        }
-        else if(param2->left != nullptr && param2->right != nullptr){
-            node_t* node = param2;
-            param1 = param2;
-            param2 = param2->right;
-            if(param2->left == nullptr){
-                if(param2->right == nullptr){
-                    node->value = param2->value;
-                    param1->right = nullptr;
-                    delete param2;
-                }
-                else{
-                    node->value = param2->value;
-                    param1->right = param2->right;
-                    delete param2;
-                }
-            }
-            else{
-                while(param2->left != nullptr){
-                    param1 = param2;
-                    param2 = param2->left;
-                }
-                if(param2->right == nullptr){
-                    node->value = param2->value;
-                    param1->left = nullptr;
-                    delete param2;
-                }
-                else{
-                    node->value = param2->value;
-                    param1->left = param2->right;
-                    delete param2;
-                }
-            }
-        }
-        return true;
-    }
-}
-
     bool find(T value) const
     {
         if (root_ == nullptr)
@@ -293,33 +221,3 @@ public:
         }
     }
 };
-
-template <typename T>
-bool read(tree_t <T> & tree, std::istream& stream)
-{
-    char op;
-    T value;
-    if (stream >> op && (op == '=' || op == '+' || op == '?' || op == 'q'))
-    {
-        if (op == '=')
-        {
-            tree.print(std::cout, tree.root(), 1);
-        }
-        else if (op == 'q')
-        {
-            return false;
-        }
-        else if ((op == '+' || op == '?') && stream >> value)
-        {
-            if (op == '+')
-            {
-                tree.insert(value);
-            }
-            else if (op == '?')
-            {
-                std::cout << tree.find(value) << std::endl;
-            }
-        }
-    }
-    return true;
-}
