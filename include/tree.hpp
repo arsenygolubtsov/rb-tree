@@ -145,9 +145,30 @@ public:
             u->color = false;
             g = grandparent(N);
             g->color = true;
-            insert_case1(N);
+            insert_case1(g);
         }
         else insert_case4(N);
+    }
+    
+    void insert_case4(node_t * N){
+        node_t * g = grandparent(N);
+        if(N == N->parent->right && N->parent == g->left){
+            rotate_left(N->parent);
+            N = N->left;
+        }
+        else if(N == N->parent->left && N->parent == g->right){
+            rotate_right(N->parent);
+            N = N->right;
+        }
+        insert_case5(N);
+    }
+    
+    insert_case5(node_t * N){
+        node_t * g = grandparent(N);
+        N->parent->color = false;
+        g->color = true;
+        if(N == N->parent->left && g->left == N->parent) rotate_right(g);
+        else rotate_left(g);
     }
     
     bool equal(node_t* a, node_t* b) const{
