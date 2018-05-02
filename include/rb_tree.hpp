@@ -156,7 +156,6 @@ public:
                         run_->color = true;
                         run_->left = nullptr;
                         run_->right = nullptr;
-                        insert_case1(run_);
                         return;
                     }
                     else
@@ -175,7 +174,6 @@ public:
                         run_->color = true;
                         run_->left = nullptr;
                         run_->right = nullptr;
-                        insert_case1(run_);
                         return;
                     }
                     else
