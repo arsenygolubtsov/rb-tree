@@ -19,6 +19,11 @@ private:
     node_t* root_;
 
 public:
+    node_t* root() const
+    {
+        return root_;
+    }
+    
     tree_t()
     {
         root_ = nullptr;
@@ -200,7 +205,7 @@ public:
         node_t * node = N->right;
         node->parent = N->parent;
         if(N->parent != nullptr){
-            if(N->parent->left = N){
+            if(N->parent->left == N){
                 N->parent->left = node;
             }
             else N->parent->right = node;
@@ -265,7 +270,7 @@ public:
         insert_case5(N);
     }
     
-    insert_case5(node_t * N){
+    void insert_case5(node_t * N){
         node_t * g = grandparent(N);
         N->parent->color = false;
         g->color = true;
