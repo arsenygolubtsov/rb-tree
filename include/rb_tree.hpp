@@ -273,3 +273,33 @@ public:
         else rotate_left(g);
     }
 };
+
+template <typename T>
+bool read(tree_t <T> & tree, std::istream& stream)
+{
+    char op;
+    T value;
+    if (stream >> op && (op == '=' || op == '+' || op == '?' || op == 'q'))
+    {
+        if (op == '=')
+        {
+            tree.print(std::cout, tree.root(), 1);
+        }
+        else if (op == 'q')
+        {
+            return false;
+        }
+        else if ((op == '+' || op == '?') && stream >> value)
+        {
+            if (op == '+')
+            {
+                tree.insert(value);
+            }
+            else if (op == '?')
+            {
+                std::cout << tree.find(value) << std::endl;
+            }
+        }
+    }
+    return true;
+}
