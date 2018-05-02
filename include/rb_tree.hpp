@@ -156,6 +156,7 @@ public:
                         run_->color = true;
                         run_->left = nullptr;
                         run_->right = nullptr;
+                        insert_case1(run_);
                         return;
                     }
                     else
@@ -174,6 +175,7 @@ public:
                         run_->color = true;
                         run_->left = nullptr;
                         run_->right = nullptr;
+                        insert_case1(run_);
                         return;
                     }
                     else
@@ -239,7 +241,7 @@ public:
     }
     
     void insert_case2(node_t * N){
-        if(!(N->parent->color)) return;
+        if(N->parent->color == false) return;
         else insert_case3(N);
     }
     
@@ -250,7 +252,7 @@ public:
             u->color = false;
             g = grandparent(N);
             g->color = true;
-            insert_case1(N);
+            insert_case1(g);
         }
         else insert_case4(N);
     }
