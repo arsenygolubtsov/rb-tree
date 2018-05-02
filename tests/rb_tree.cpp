@@ -142,3 +142,27 @@ TEST_CASE("equal")
 	tree1.insert(5);
 	REQUIRE(tree1==tree2);
 }
+
+TEST_CASE("new")
+{
+	tree_t<int> tree {10 , 85 , 15 , 70 , 20 , 60 , 30 , 50 , 65 , 80 , 90 , 40 , 5 , 55};
+	
+	std::string result{	"--------90\n"
+                        	"------85\n"
+                        	"--------80\n"
+                        	"----70\n"
+                        	"--------65\n"
+			  	"------60\n"
+			  	"----------55\n"
+			  	"--------50\n"
+			  	"----------40\n"
+			  	"--30\n"
+			  	"------20\n"
+			  	"----15\n"
+			  	"------10\n"
+			  	"--------5\n"};
+	
+	std::ostringstream ostream;
+    	tree.print(ostream, tree.root(), 1);
+    	REQUIRE(ostream.str() == result);
+}
