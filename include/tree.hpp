@@ -47,6 +47,7 @@ public:
             root_->value = value;
             root_->left = nullptr;
             root_->right = nullptr;
+            root_->color = false;
         }
         else
         {
@@ -61,6 +62,7 @@ public:
                         run_->left->parent = run_;
                         run_ = run_->left;
                         run_->value = value;
+                        run_->color = true;
                         run_->left = nullptr;
                         run_->right = nullptr;
                         return;
@@ -78,6 +80,7 @@ public:
                         run_->right->parent = run_;
                         run_ = run_->right;
                         run_->value = value;
+                        run_->color = true;
                         run_->left = nullptr;
                         run_->right = nullptr;
                         return;
@@ -123,6 +126,28 @@ public:
         }
         n->parent = node;
         node->right = N;
+    }
+    
+    void insert_case1(node_t * N){
+        if(N->parent == nullptr) N->color = false;
+        else insert_case2(N);
+    }
+    
+    void insert_case2(node_t * N){
+        if(!(N->parent->color)) return;
+        else insert_case3(N);
+    }
+    
+    void insert_case3(node_t * N){
+        node_t * u = uncle(N), * g;
+        if(u != nullptr && u->color == true){
+            n->parent->color = false;
+            u->color = false;
+            g = grandparent(N);
+            g->color = true;
+            insert_case1(N);
+        }
+        else insert_case4(N);
     }
     
     bool equal(node_t* a, node_t* b) const{
