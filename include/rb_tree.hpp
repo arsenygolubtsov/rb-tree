@@ -214,6 +214,7 @@ public:
         if(node->left != nullptr){
             node->left->parent = N;
         }
+        if(N->parent == nullptr) root_ = node;
         N->parent = node;
         node->left = N;
     }
@@ -231,6 +232,7 @@ public:
         if(node->right != nullptr){
             node->right->parent = N;
         }
+        if(N->parent == nullptr) root_ = node;
         N->parent = node;
         node->right = N;
     }
