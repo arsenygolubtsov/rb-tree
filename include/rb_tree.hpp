@@ -441,7 +441,76 @@ public:
         return true;
     }
 }
-    
+
+node_t * sibling(node_t * n){
+	if(n == n->parent->left) return n->parent->right;
+	else return n->parent->left;
+}
+
+void delete_case1(node_t * n){
+	if(n->parent != nullptr) delete_case2(n);
+}
+
+void delete_case2(node_t * n){
+	node_t * s = sibling(n);
+	if(s->color == true){
+		n->parent->color = true;
+		s->color = false;
+		if(n == n->parent->left) rotate_left(n->parent);
+		else rotate_right(n->parent);
+	}
+	delete_case3(n);
+}
+
+void delete_case3(node_t * n){
+	node_t * s = sibling(n);
+	if((n->parent->color == false) && (s->color == false) && (s->left->color == false) && (s->right->color == false)){
+		s->color = true;
+		delete_case1(n->parent);
+	}
+	else delete_case4(n);
+}
+
+void delete_case4(node_t * n){
+	nodet * s = sibling(n);
+	if((n->parent->color == true) && (s->color == false) && (s->left->color == false) && (s->right->color == false)){
+		s->color = true;
+		n->parent->color = false;
+	}
+	else delete_case5(n);
+}
+
+void delete_case5(node_t * n){
+	node_t * s = sibling(n);
+	if(s->color == false){
+		if((n == n->parent->left) && (s->right->color == false) && (s->left->color == true)){
+			s->color = true;
+			s->left->color = false;
+			rotate_right(s);
+		}
+		else if((n == n->parent->right) && (s->left->color == false) && (s->right->color == true)){
+			s->color = true;
+			s->right->color = false;
+			rotate_left(s);
+		}
+	}
+	delete_case6(n);
+}
+
+void delete_case6(node_t * n){
+	node_t * s = sibling(n);
+	s->color = n->parent->color;
+    n->parent->color = false;
+	if(n == n->parent->left){
+        s->right->color = false;
+		rotate_left(n->parent);
+	}
+	else{
+		s->left->color = false;
+		rotate_right(n->parent);
+	}
+}
+	
 };
 
 template <typename T>
