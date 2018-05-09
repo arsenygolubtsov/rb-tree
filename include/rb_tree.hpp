@@ -328,11 +328,11 @@ public:
                 node_t* node = root_;
                 if(param2->left != nullptr){
                     root_ = param2->left;
-                    root_->parent == nullptr;
+                    root_->parent = nullptr;
                 }
                 else if(param2->right != nullptr){
                     root_ = param2->right;
-                    root_->parent == nullptr;
+                    root_->parent = nullptr;
                 }
                 delete node;
             }
