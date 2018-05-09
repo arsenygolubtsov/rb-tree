@@ -391,7 +391,7 @@ public:
                     node->right = nullptr;
                     delete param2;
                     if(tr == false){
-                        if(node->color = true) node->color = false;
+                        if(node->color == true) node->color = false;
                         else delete_case1(node);
                     }
                 }
@@ -403,7 +403,7 @@ public:
                     param2->right->parent = node;
                     delete param2;
                     if(tr == false){
-                        if(node->color = true) node->color = false;
+                        if(node->color == true) node->color = false;
                         else delete_case1(node);
                     }
                 }
@@ -420,7 +420,7 @@ public:
                     param1->left = nullptr;
                     delete param2;
                     if(tr == false){
-                        if(node->color = true) node->color = false;
+                        if(node->color == true) node->color = false;
                         else delete_case1(node);
                     }
                 }
@@ -432,7 +432,7 @@ public:
                     param2->right->parent = param1;
                     delete param2;
                     if(tr == false){
-                        if(node->color = true) node->color = false;
+                        if(node->color == true) node->color = false;
                         else delete_case1(node);
                     }
                 }
@@ -472,7 +472,7 @@ void delete_case3(node_t * n){
 }
 
 void delete_case4(node_t * n){
-	nodet * s = sibling(n);
+	node_t * s = sibling(n);
 	if((n->parent->color == true) && (s->color == false) && (s->left->color == false) && (s->right->color == false)){
 		s->color = true;
 		n->parent->color = false;
