@@ -465,6 +465,7 @@ void delete_case2(node_t * n){
 
 void delete_case3(node_t * n){
 	node_t * s = sibling(n);
+	if (s->left == nullptr || s->right == nullptr) return;
 	if((n->parent->color == false) && (s->color == false) && (s->left->color == false) && (s->right->color == false)){
 		s->color = true;
 		delete_case1(n->parent);
